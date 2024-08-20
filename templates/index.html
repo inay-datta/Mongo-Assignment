@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask MongoDB CRUD Example</title>
+</head>
+<body>
+    <h1>Flask MongoDB CRUD Operations</h1>
+
+    <h2>Create Document</h2>
+    <form action="/create" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"><br><br>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age"><br><br>
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city"><br><br>
+        <input type="submit" value="Create">
+    </form>
+
+    <h2>Read Documents</h2>
+    <form action="/read" method="get">
+        <input type="submit" value="Read">
+    </form>
+
+    <h2>Update Document</h2>
+    <form id="updateForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"><br><br>
+        <label for="new_age">New Age:</label>
+        <input type="number" id="new_age" name="new_age"><br><br>
+        <label for="object_id">Object ID:</label>
+        <input type="text" id="object_id" name="object_id"><br><br>
+        <input type="button" value="Update" onclick="updateDocument()">
+    </form>
+
+    <script>
+        function updateDocument() {
+            const name = document.getElementById('name').value;
+            const new_age = document.getElementById('new_age').value;
+            const object_id = document.getElementById('object_id').value;
+
+            fetch('http://127.0.0.1:5000/update/' + object_id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name, new_age: new_age })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                alert(data.message);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+<h2>Delete Document</h2>
+<form id="deleteForm">
+    <label for="object_id_delete">Object ID:</label>
+    <input type="text" id="object_id_delete" name="object_id_delete"><br><br>
+    <input type="button" value="Delete" onclick="deleteDocument()">
+</form>
+
+<script>
+    function deleteDocument() {
+        const object_id_delete = document.getElementById('object_id_delete').value;
+
+        fetch('http://127.0.0.1:5000/delete/' + object_id_delete, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            alert(data.message);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+</body>
+</html>
